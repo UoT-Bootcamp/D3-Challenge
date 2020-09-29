@@ -20,7 +20,7 @@ function makeResponsive() {
     top: 50,
     right: 50,
     bottom: 50,
-    left: 50
+    left: 120
   };
   
   // chart area minus margins
@@ -106,26 +106,26 @@ function makeResponsive() {
   // function used for updating circles group with new tooltip
   function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
 
-    var label;
+    // var label;
 
     if (chosenXAxis === "poverty") {
-      label = "Poverty (%)";
+      xLabel = "Poverty (%)";
     }
     else if (chosenXAxis === "age") {
-      label = "Age (Median)";
+      xLabel = "Age (Median)";
     }
     else {
-      label = "Household Income (Median)";
+      xLabel = "Household Income (Median)";
     }
 
     if (chosenYAxis === "healthcare") {
-      label = "Lacks Healthcare (%)";
+      yLabel = "Lacks Healthcare (%)";
     }
     else if (chosenYAxis === "obesity") {
-      label = "Obese (%)";
+      yLabel = "Obese (%)";
     }
     else {
-      label = "Smokes (%)";
+      yLabel = "Smokes (%)";
     }
 
     var toolTip = d3.tip()
@@ -143,7 +143,7 @@ function makeResponsive() {
       toolTip.show(data, this);
       })
       // onmouseout event
-      .on("mouseout", function(data, index) {
+      .on("mouseout", function(data) {
         toolTip.hide(data);
       });
 
@@ -198,13 +198,13 @@ function makeResponsive() {
 
 
     // // Append Text to Circles
-    // var textGroup = circleGroup.selectAll(".stateText")
+    // var circleText = circleGroup.selectAll(".stateText")
     //   .data(healthData)
     //   .enter()
     //   .append("text")
     //   .classed("stateText", true)
-    //   .attr("x", d => xLinearScale(d[chosenXAxis]))
-    //   .attr("y", d => yLinearScale(d[chosenYAxis]* .90))
+    //   // .attr("x", d => xLinearScale(d[chosenXAxis]))
+    //   // .attr("y", d => yLinearScale(d[chosenYAxis]* .90))
     //   .text(d => (d.abbr))
     //   // .attr("class", "stateText")
     //   .attr("font-size", "9px")
@@ -218,7 +218,7 @@ function makeResponsive() {
     // First x-axis label
     var poverty = xLabelsGroup.append("text")
       .attr("x", 0)
-      .attr("y", 20)
+      .attr("y", 30)
       .attr("value", "poverty") // value to grab for event listener
       .classed("active", true)
       .text("In Poverty (%)");
@@ -226,7 +226,7 @@ function makeResponsive() {
     // Second x-axis label
     var age = xLabelsGroup.append("text")
       .attr("x", 0)
-      .attr("y", 40)
+      .attr("y", 50)
       .attr("value", "age") // value to grab for event listener
       .classed("inactive", true)
       .text("Age (Median)");
@@ -234,7 +234,7 @@ function makeResponsive() {
     // Second x-axis label
     var household = xLabelsGroup.append("text")
       .attr("x", 0)
-      .attr("y", 60)
+      .attr("y", 70)
       .attr("value", "income") // value to grab for event listener
       .classed("inactive", true)
       .text("Household Income (Median)");
@@ -242,12 +242,13 @@ function makeResponsive() {
 
     // Create group for three y-axis labels
     var yLabelsGroup = chartGroup.append("g")
-      .attr("transform", `translate(${chartWidth / 2}, ${chartHeight + 20})`);
+      .attr("transform", "rotate(-90)", `translate(${chartHeight / 2}, ${chartWidth + 20})`);
+
 
     // First y-axis label
     var healthcare = yLabelsGroup.append("text")
       .attr("x", 0)
-      .attr("y", 20)
+      .attr("y", -30)
       .attr("value", "healthcare") // value to grab for event listener
       .classed("active", true)
       .text("Lacks Healthcare (%)");
@@ -255,7 +256,7 @@ function makeResponsive() {
     // Second y-axis label
     var smokes = yLabelsGroup.append("text")
       .attr("x", 0)
-      .attr("y", 20)
+      .attr("y", -50)
       .attr("value", "smokes") // value to grab for event listener
       .classed("inactive", true)
       .text("Smokes (%)");
@@ -263,7 +264,7 @@ function makeResponsive() {
     // Third y-axis label
     var obesity = yLabelsGroup.append("text")
       .attr("x", 0)
-      .attr("y", 20)
+      .attr("y", -70)
       .attr("value", "obesity") // value to grab for event listener
       .classed("inactive", true)
       .text("Obese (%)");
@@ -309,25 +310,25 @@ function makeResponsive() {
           }
           else if (chosenYAxis === "age") {
             age
-              .classed("active", true)
-              .classed("inactive", false);
-            poverty
               .classed("active", false)
               .classed("inactive", true);
+            poverty
+              .classed("active", true)
+              .classed("inactive", false);
             income
               .classed("active", false)
               .classed("inactive", true);
           }
           else {
             age
-              .classed("active", true)
-              .classed("inactive", false);
+              .classed("active", false)
+              .classed("inactive", true);
             poverty
               .classed("active", false)
               .classed("inactive", true);
             income
-              .classed("active", false)
-              .classed("inactive", true);
+              .classed("active", true)
+              .classed("inactive", false);
           }
         }
     });
@@ -369,25 +370,25 @@ function makeResponsive() {
           }
           else if (chosenYAxis === "smokes") {
             healthcare
-              .classed("active", true)
-              .classed("inactive", false);
-            smokes
               .classed("active", false)
               .classed("inactive", true);
+            smokes
+              .classed("active", true)
+              .classed("inactive", false);
             obesity
               .classed("active", false)
               .classed("inactive", true);
           }
           else {
             healthcare
-              .classed("active", true)
-              .classed("inactive", false);
+              .classed("active", false)
+              .classed("inactive", true);
             smokes
               .classed("active", false)
               .classed("inactive", true);
             obesity
-              .classed("active", false)
-              .classed("inactive", true);
+              .classed("active", true)
+              .classed("inactive", false);
           }
         }
       });
