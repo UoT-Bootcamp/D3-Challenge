@@ -2,7 +2,7 @@
 // automatically resizes the chart
 function makeResponsive() {
 
-  // if the SVG area isn't empty when the browser loads,
+  // If the SVG area isn't empty when the browser loads,
   // remove it and replace it with a resized version of the chart
   var svgArea = d3.select("body").select("svg");
 
@@ -23,10 +23,17 @@ function makeResponsive() {
     left: 120
   };
   
+  // padding for the text at the bottom and left axes
+  var tPadBottom = 70;
+  var tPadLeft = 70;
+
+
   // chart area minus margins
-  var chartHeight = svgHeight - margin.top - margin.bottom - 70;
-  var chartWidth = svgWidth - margin.left - margin.right - 70;
+  var chartHeight = svgHeight - margin.top - margin.bottom - tPadBottom;
+  var chartWidth = svgWidth - margin.left - margin.right - tPadLeft;
   
+  console.log(chartHeight, chartWidth);
+
   // Create an SVG wrapper, append an SVG group that will hold our chart,
   // and shift the latter by left and top margins.
   var svg = d3
@@ -103,6 +110,17 @@ function makeResponsive() {
   }
 
 
+  function renderCircleText(circlesText, newXScale, chosenXAxis, newYScale, chosenYAxis) {
+
+    circlesText.transition()
+      .duration(1000)
+      .attr("x", d => newXScale(d[chosenXAxis]))
+      .attr("y", d => newYScale(d[chosenYAxis]));
+
+  return circlesText;
+  }
+
+
   // function used for updating circles group with new tooltip
   function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
 
@@ -149,6 +167,21 @@ function makeResponsive() {
 
     return circlesGroup;
   }
+
+  
+
+// Set the radius for each dot that will appear in the graph.
+// // If the browser changes below 530 pixels, so we reduce the radius of the circle from 10 to 5 pixels
+// var circRadius;
+// function crGet() {
+//   if (chartWidth <= 530) {
+//     circRadius = 5;
+//   }
+//   else {
+//     circRadius = 10;
+//   }
+// }
+// crGet();
 
 
   // Retrieve data from the CSV file and execute everything below
@@ -197,19 +230,20 @@ function makeResponsive() {
       .attr("opacity", ".90");
 
 
-    // // Append Text to Circles
-    // var circleText = circleGroup.selectAll(".stateText")
-    //   .data(healthData)
-    //   .enter()
-    //   .append("text")
-    //   .classed("stateText", true)
-    //   // .attr("x", d => xLinearScale(d[chosenXAxis]))
-    //   // .attr("y", d => yLinearScale(d[chosenYAxis]* .90))
-    //   .text(d => (d.abbr))
-    //   // .attr("class", "stateText")
-    //   .attr("font-size", "9px")
-    //   .attr("text-anchor", "middle")
-    //   .attr("fill", "white");
+
+      var circlesText = chartGroup.selectAll(".stateText")
+      .data(healthData)
+      .enter()
+      .append("text")
+      .classed("stateText", true)
+      .attr("x", d => xLinearScale(d[chosenXAxis])+1)
+      .attr("y", d => yLinearScale(d[chosenYAxis])+2)
+      .text(d => d.abbr)
+      .attr("font-size", 8)
+      // .attr("opacity", ".90");
+
+
+
 
     // Create group for three x-axis labels
     var xLabelsGroup = chartGroup.append("g")
@@ -232,7 +266,7 @@ function makeResponsive() {
       .text("Age (Median)");
 
     // Second x-axis label
-    var household = xLabelsGroup.append("text")
+    var income = xLabelsGroup.append("text")
       .attr("x", 0)
       .attr("y", 70)
       .attr("value", "income") // value to grab for event listener
@@ -242,12 +276,12 @@ function makeResponsive() {
 
     // Create group for three y-axis labels
     var yLabelsGroup = chartGroup.append("g")
-      .attr("transform", "rotate(-90)", `translate(${chartHeight / 2}, ${chartWidth + 20})`);
+      .attr("transform", "rotate(-90)");
 
 
     // First y-axis label
     var healthcare = yLabelsGroup.append("text")
-      .attr("x", 0)
+      .attr("x", -chartHeight/2)
       .attr("y", -30)
       .attr("value", "healthcare") // value to grab for event listener
       .classed("active", true)
@@ -255,7 +289,7 @@ function makeResponsive() {
 
     // Second y-axis label
     var smokes = yLabelsGroup.append("text")
-      .attr("x", 0)
+      .attr("x", -chartHeight/2)
       .attr("y", -50)
       .attr("value", "smokes") // value to grab for event listener
       .classed("inactive", true)
@@ -263,7 +297,7 @@ function makeResponsive() {
 
     // Third y-axis label
     var obesity = yLabelsGroup.append("text")
-      .attr("x", 0)
+      .attr("x", -chartHeight/2)
       .attr("y", -70)
       .attr("value", "obesity") // value to grab for event listener
       .classed("inactive", true)
@@ -291,30 +325,32 @@ function makeResponsive() {
           xAxis = renderXAxes(xLinearScale, xAxis);
 
           // updates circles with new x values
-          circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis);
+          circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+
+          circlesText = renderCircleText(circlesText, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
           // updates tooltips with new info
-          circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
+          circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
           // changes classes to change bold text
           if (chosenXAxis === "poverty") {
             age
-              .classed("active", true)
-              .classed("inactive", false);
-            poverty
               .classed("active", false)
               .classed("inactive", true);
+            poverty
+              .classed("active", true)
+              .classed("inactive", false);
             income
               .classed("active", false)
               .classed("inactive", true);
           }
-          else if (chosenYAxis === "age") {
+          else if (chosenXAxis === "age") {
             age
-              .classed("active", false)
-              .classed("inactive", true);
-            poverty
               .classed("active", true)
               .classed("inactive", false);
+            poverty
+              .classed("active", false)
+              .classed("inactive", true);
             income
               .classed("active", false)
               .classed("inactive", true);
@@ -351,10 +387,12 @@ function makeResponsive() {
           yAxis = renderYAxes(yLinearScale, yAxis);
 
           // updates circles with new x values
-          circlesGroup = renderCircles(circlesGroup, yLinearScale, chosenYAxis);
+          circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+
+          circlesText = renderCircleText(circlesText, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
           // updates tooltips with new info
-          circlesGroup = updateToolTip(chosenYAxis, circlesGroup);
+          circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
           // changes classes to change bold text
           if (chosenYAxis === "healthcare") {
@@ -393,7 +431,7 @@ function makeResponsive() {
         }
       });
 
-  });
+})
 };
 
 // When the browser loads, makeResponsive() is called.
