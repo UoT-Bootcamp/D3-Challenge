@@ -219,8 +219,8 @@ function makeResponsive() {
     .enter()
     .append("text")
     .classed("stateText", true)
-    .attr("x", d => xLinearScale(d[chosenXAxis])+1)
-    .attr("y", d => yLinearScale(d[chosenYAxis])+2)
+    .attr("x", d => xLinearScale(d[chosenXAxis]))
+    .attr("y", d => yLinearScale(d[chosenYAxis])+3)
     .text(d => d.abbr)
     .attr("font-size", 9)
   
