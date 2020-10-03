@@ -193,11 +193,14 @@ function makeResponsive() {
     // ==============================
     // append x axis
     var xAxis = chartGroup.append("g")
+      .classed("aText", true)
       .attr("transform", `translate(0, ${chartHeight})`)
       .call(bottomAxis);
 
     // append y axis
     var yAxis = chartGroup.append("g")
+      .classed("aText", true)
+      // .attr("transform", `translate(0, ${chartwidth})`)
       .call(leftAxis);
 
     // Step 5: Create Circles
