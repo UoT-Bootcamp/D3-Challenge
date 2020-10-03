@@ -1,26 +1,48 @@
-// svg container
-var svgHeight = 500;
-var svgWidth = 700;
+// The code for the chart is wrapped inside a function that
+// automatically resizes the chart
+function makeResponsive() {
 
-// margins
-var margin = {
-    top: 20,
-    right: 40,
-    bottom: 80,
-    left: 100
+  // If the SVG area isn't empty when the browser loads,
+  // remove it and replace it with a resized version of the chart
+  var svgArea = d3.select("body").select("svg");
+
+  // clear svg is not empty
+  if (!svgArea.empty()) {
+    svgArea.remove();
+  }
+
+  // svg container
+  var svgHeight = window.innerHeight;
+  var svgWidth = window.innerWidth;
+
+  // margins
+  var margin = {
+    top: 50,
+    right: 50,
+    bottom: 50,
+    left: 120
   };
   
   // chart area minus margins
   var chartHeight = svgHeight - margin.top - margin.bottom;
   var chartWidth = svgWidth - margin.left - margin.right;
   
+  // padding for the text at the bottom and left axes
+  var tPadBottom = 70;
+  var tPadLeft = 70;
+
+
+  // chart area minus margins
+  var chartHeight = svgHeight - margin.top - margin.bottom - tPadBottom;
+  var chartWidth = svgWidth - margin.left - margin.right - tPadLeft;
+
   // Create an SVG wrapper, append an SVG group that will hold our chart,
-// and shift the latter by left and top margins.
-var svg = d3
-.select("#scatter")
-.append("svg")
-.attr("width", svgWidth)
-.attr("height", svgHeight);
+  // and shift the latter by left and top margins.
+  var svg = d3
+    .select("#scatter")
+    .append("svg")
+    .attr("width", svgWidth)
+    .attr("height", svgHeight);
 
 // Append an SVG group
 var chartGroup = svg.append("g")
@@ -88,11 +110,22 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
     .data(healthData)
     .enter()
     .append("circle")
+    .classed("stateCircle", true)
     .attr("cx", d => xLinearScale(d.poverty))
     .attr("cy", d => yLinearScale(d.healthcare))
-    .attr("r", "10")
+    .attr("r", 10)
     .attr("fill", "skyblue")
-    // .attr("opacity", "1");
+    .attr("opacity", ".90");
+
+    // var circlesText = chartGroup.selectAll(".stateText")
+    // .data(healthData)
+    // .enter()
+    // .append("text")
+    // .classed("stateText", true)
+    // .attr("x", d => xLinearScale(d[chosenXAxis])+1)
+    // .attr("y", d => yLinearScale(d[chosenYAxis])+2)
+    // .text(d => d.abbr)
+    // .attr("font-size", 8);
     
 
     // Create axes labels
@@ -107,8 +140,14 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
       chartGroup.append("text")
       .attr("transform", `translate(${chartWidth / 3}, ${chartHeight + margin.top + 30})`)
       .attr("class", "axisText")
-      .text("Hair Metal Band Hair Length (inches)");
+      .text("In Poverty (%)");
   }).catch(function(error) {
     console.log(error);
 
 });
+};
+// When the browser loads, makeResponsive() is called.
+makeResponsive();
+
+// When the browser window is resized, makeResponsive() is called.
+d3.select(window).on("resize", makeResponsive);

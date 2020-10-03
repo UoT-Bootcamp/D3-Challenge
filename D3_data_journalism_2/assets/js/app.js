@@ -2,8 +2,7 @@
 // automatically resizes the chart
 function makeResponsive() {
 
-  // If the SVG area isn't empty when the browser loads,
-  // remove it and replace it with a resized version of the chart
+  // If the SVG area isn't empty when the browser loads, remove it and replace it with a resized version of the chart
   var svgArea = d3.select("body").select("svg");
 
   // clear svg is not empty
@@ -27,15 +26,11 @@ function makeResponsive() {
   var tPadBottom = 70;
   var tPadLeft = 70;
 
-
   // chart area minus margins
   var chartHeight = svgHeight - margin.top - margin.bottom - tPadBottom;
   var chartWidth = svgWidth - margin.left - margin.right - tPadLeft;
   
-  console.log(chartHeight, chartWidth);
-
-  // Create an SVG wrapper, append an SVG group that will hold our chart,
-  // and shift the latter by left and top margins.
+  // Create an SVG wrapper, append an SVG group that will hold our chart, and shift the latter by left and top margins.
   var svg = d3
   .select("#scatter")
   .append("svg")
@@ -62,7 +57,6 @@ function makeResponsive() {
     return xLinearScale;
   }
 
-
   // function used for updating y-scale var upon click on axis label
   function yScale(healthData, chosenYAxis) {
     var yLinearScale = d3.scaleLinear()
@@ -72,7 +66,6 @@ function makeResponsive() {
       .range([chartHeight, 0]);
     return yLinearScale;
   }
-
 
   // function used for updating xAxis var upon click on axis label
   function renderXAxes(newXScale, xAxis) {
@@ -96,9 +89,7 @@ function makeResponsive() {
     return yAxis;
   }
 
-
-  // function used for updating circles group with a transition to
-  // new circles
+  // function used for updating circles group with a transition to new circles
   function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYAxis) {
 
     circlesGroup.transition()
@@ -109,7 +100,7 @@ function makeResponsive() {
   return circlesGroup;
   }
 
-
+  // function used for updating circles group with a transition to circles text
   function renderCircleText(circlesText, newXScale, chosenXAxis, newYScale, chosenYAxis) {
 
     circlesText.transition()
@@ -120,11 +111,8 @@ function makeResponsive() {
   return circlesText;
   }
 
-
   // function used for updating circles group with new tooltip
   function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
-
-    // var label;
 
     if (chosenXAxis === "poverty") {
       xLabel = "Poverty (%)";
@@ -148,7 +136,7 @@ function makeResponsive() {
 
     var toolTip = d3.tip()
       .attr("class", "d3-tip")
-      .offset([70, 70])
+      .offset([60, 70])
       .html(function(d) {
         return (`${d.state}<br>
                 Poverty: ${d.poverty}% <br>
@@ -156,12 +144,21 @@ function makeResponsive() {
       });
 
     circlesGroup.call(toolTip);
-
+    
+    // onmouseover event
     circlesGroup.on("mouseover", function(data) {
-      toolTip.show(data, this);
+      toolTip.style("opacity", 1)
+      d3.select(this)
+        .style("stroke", "black")
+        .style("opacity", 1);
+      toolTip.show(data, this)
       })
       // onmouseout event
       .on("mouseout", function(data) {
+        toolTip.style("opacity", 0)
+        d3.select(this)
+          .style("stroke", "none")
+          .style("opacity", 0.8)
         toolTip.hide(data);
       });
 
@@ -169,21 +166,6 @@ function makeResponsive() {
   }
 
   
-
-// Set the radius for each dot that will appear in the graph.
-// // If the browser changes below 530 pixels, so we reduce the radius of the circle from 10 to 5 pixels
-// var circRadius;
-// function crGet() {
-//   if (chartWidth <= 530) {
-//     circRadius = 5;
-//   }
-//   else {
-//     circRadius = 10;
-//   }
-// }
-// crGet();
-
-
   // Retrieve data from the CSV file and execute everything below
   d3.csv("assets/data/data.csv").then(function(healthData) {
     
@@ -203,22 +185,24 @@ function makeResponsive() {
     var xLinearScale = xScale(healthData, chosenXAxis);
     var yLinearScale = yScale(healthData, chosenYAxis);
 
-    // Create initial axis functions
+    // Step 3: Create axis functions
+    // ==============================
     var bottomAxis = d3.axisBottom(xLinearScale);
     var leftAxis = d3.axisLeft(yLinearScale);
 
+    // Step 4: Append Axes to the chart
+    // ==============================
     // append x axis
     var xAxis = chartGroup.append("g")
-      // .classed("x-axis", true)
       .attr("transform", `translate(0, ${chartHeight})`)
       .call(bottomAxis);
 
     // append y axis
     var yAxis = chartGroup.append("g")
-      // .classed("y-axis", true)
       .call(leftAxis);
 
-    // append initial circles
+    // Step 5: Create Circles
+    // ==============================
     var circlesGroup = chartGroup.selectAll(".stateCircle")
       .data(healthData)
       .enter()
@@ -229,23 +213,18 @@ function makeResponsive() {
       .attr("r", 10)
       .attr("opacity", ".90");
 
-
-
-      var circlesText = chartGroup.selectAll(".stateText")
-      .data(healthData)
-      .enter()
-      .append("text")
-      .classed("stateText", true)
-      .attr("x", d => xLinearScale(d[chosenXAxis])+1)
-      .attr("y", d => yLinearScale(d[chosenYAxis])+2)
-      .text(d => d.abbr)
-      .attr("font-size", 8)
-      // .attr("opacity", ".90");
-
-
-
-
-    // Create group for three x-axis labels
+    // Append the circle with text inside
+    var circlesText = chartGroup.selectAll(".stateText")
+    .data(healthData)
+    .enter()
+    .append("text")
+    .classed("stateText", true)
+    .attr("x", d => xLinearScale(d[chosenXAxis])+1)
+    .attr("y", d => yLinearScale(d[chosenYAxis])+2)
+    .text(d => d.abbr)
+    .attr("font-size", 9)
+  
+    // Group for three x-axis labels
     var xLabelsGroup = chartGroup.append("g")
       .attr("transform", `translate(${chartWidth / 2}, ${chartHeight + 20})`);
 
@@ -278,11 +257,10 @@ function makeResponsive() {
     var yLabelsGroup = chartGroup.append("g")
       .attr("transform", "rotate(-90)");
 
-
     // First y-axis label
     var healthcare = yLabelsGroup.append("text")
       .attr("x", -chartHeight/2)
-      .attr("y", -30)
+      .attr("y", -40)
       .attr("value", "healthcare") // value to grab for event listener
       .classed("active", true)
       .text("Lacks Healthcare (%)");
@@ -290,7 +268,7 @@ function makeResponsive() {
     // Second y-axis label
     var smokes = yLabelsGroup.append("text")
       .attr("x", -chartHeight/2)
-      .attr("y", -50)
+      .attr("y", -60)
       .attr("value", "smokes") // value to grab for event listener
       .classed("inactive", true)
       .text("Smokes (%)");
@@ -298,7 +276,7 @@ function makeResponsive() {
     // Third y-axis label
     var obesity = yLabelsGroup.append("text")
       .attr("x", -chartHeight/2)
-      .attr("y", -70)
+      .attr("y", -80)
       .attr("value", "obesity") // value to grab for event listener
       .classed("inactive", true)
       .text("Obese (%)");
@@ -317,8 +295,7 @@ function makeResponsive() {
           // replaces chosenXAxis with value
           chosenXAxis = value;
 
-          // functions here found above csv import
-          // updates x scale for new data
+          // functions here found above csv import updates x scale for new data
           xLinearScale = xScale(healthData, chosenXAxis);
 
           // updates x axis with transition
@@ -327,6 +304,7 @@ function makeResponsive() {
           // updates circles with new x values
           circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
+          // updates circles with circle text
           circlesText = renderCircleText(circlesText, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
           // updates tooltips with new info
@@ -372,6 +350,7 @@ function makeResponsive() {
     // y axis labels event listener
     yLabelsGroup.selectAll("text")
       .on("click", function() {
+
         // get value of selection
         var value = d3.select(this).attr("value");
         if (value !== chosenYAxis) {
@@ -379,8 +358,7 @@ function makeResponsive() {
           // replaces chosenYAxis with value
           chosenYAxis = value;
 
-          // functions here found above csv import
-          // updates x scale for new data
+          // functions here found above csv import updates y scale for new data
           yLinearScale = yScale(healthData, chosenYAxis);
 
           // updates x axis with transition
@@ -389,6 +367,7 @@ function makeResponsive() {
           // updates circles with new x values
           circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
+          // updates circles with circles text
           circlesText = renderCircleText(circlesText, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
           // updates tooltips with new info
@@ -430,7 +409,6 @@ function makeResponsive() {
           }
         }
       });
-
 })
 };
 
@@ -439,4 +417,3 @@ makeResponsive();
 
 // When the browser window is resized, makeResponsive() is called.
 d3.select(window).on("resize", makeResponsive);
-
