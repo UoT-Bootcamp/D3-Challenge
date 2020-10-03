@@ -20,7 +20,7 @@ function makeResponsive() {
     top: 50,
     right: 50,
     bottom: 50,
-    left: 120
+    left: 180
   };
   
 
@@ -84,7 +84,7 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
 
     // Step 5: Create Circles
     // ==============================
-    var circlesGroup = chartGroup.selectAll("circle")
+    var circlesGroup = chartGroup.selectAll(".stateCircle")
     .data(healthData)
     .enter()
     .append("circle")
@@ -92,7 +92,7 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
     .attr("cx", d => xLinearScale(d.poverty))
     .attr("cy", d => yLinearScale(d.healthcare))
     .attr("r", 10)
-    .attr("fill", "skyblue")
+    // .attr("fill", "skyblue")
     .attr("opacity", ".90");
 
 
@@ -102,8 +102,8 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
     .enter()
     .append("text")
     .classed("stateText", true)
-    .attr("x", d => xLinearScale(d[bottomAxis]))
-    .attr("y", d => yLinearScale(d[leftAxis])+3)
+    .attr("dx", d => xLinearScale(d.poverty))
+    .attr("dy", d => yLinearScale(d.healthcare)+10/2.5)
     .text(d => d.abbr)
     .attr("font-size", 9)
 
@@ -151,14 +151,14 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
     // Create axes labels
     chartGroup.append("text")
       .attr("transform", "rotate(-90)")
-      .attr("y", 0 - margin.left + 40)
+      .attr("y", margin.left - 240)
       .attr("x", 0 - (svgHeight / 2))
       .attr("dy", "1em")
       .attr("class", "axisText")
       .text("Lacks Healthcare (%)");
 
       chartGroup.append("text")
-      .attr("transform", `translate(${chartWidth / 3}, ${chartHeight + margin.top + 30})`)
+      .attr("transform", `translate(${chartWidth / 3}, ${chartHeight + margin.top + 5})`)
       .attr("class", "axisText")
       .text("In Poverty (%)");
   }).catch(function(error) {
