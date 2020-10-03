@@ -46,13 +46,11 @@ function makeResponsive() {
 
   // function used for updating x-scale var upon click on axis label
   function xScale(healthData, chosenXAxis) {
-    // create scales
     var xLinearScale = d3.scaleLinear()
       .domain([d3.min(healthData, d => d[chosenXAxis]) * 0.8,
         d3.max(healthData, d => d[chosenXAxis]) * 1.2
         ])
       .range([0, chartWidth]);
-
     return xLinearScale;
   }
 
@@ -69,50 +67,41 @@ function makeResponsive() {
   // function used for updating xAxis var upon click on axis label
   function renderXAxes(newXScale, xAxis) {
     var bottomAxis = d3.axisBottom(newXScale);
-
     xAxis.transition()
       .duration(1000)
       .call(bottomAxis);
-
     return xAxis;
   }
 
   // function used for updating yAxis var upon click on axis label
   function renderYAxes(newYScale, yAxis) {
     var leftAxis = d3.axisLeft(newYScale);
-
     yAxis.transition()
       .duration(1000)
       .call(leftAxis);
-
     return yAxis;
   }
 
   // function used for updating circles group with a transition to new circles
   function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYAxis) {
-
     circlesGroup.transition()
       .duration(1000)
       .attr("cx", d => newXScale(d[chosenXAxis]))
       .attr("cy", d => newYScale(d[chosenYAxis]));
-
-  return circlesGroup;
+    return circlesGroup;
   }
 
   // function used for updating circles group with a transition to circles text
   function renderCircleText(circlesText, newXScale, chosenXAxis, newYScale, chosenYAxis) {
-
     circlesText.transition()
       .duration(1000)
       .attr("x", d => newXScale(d[chosenXAxis]))
       .attr("y", d => newYScale(d[chosenYAxis]));
-
-  return circlesText;
+    return circlesText;
   }
 
   // function used for updating circles group with new tooltip
   function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
-
     if (chosenXAxis === "poverty") {
       xLabel = "Poverty (%)";
     }
@@ -132,7 +121,6 @@ function makeResponsive() {
     else {
       yLabel = "Smokes (%)";
     }
-
     var toolTip = d3.tip()
       .attr("class", "d3-tip")
       .offset([60, 70])
@@ -141,9 +129,7 @@ function makeResponsive() {
                 Poverty: ${d.poverty}% <br>
                 Obesity: ${d.obesity}%`);
       });
-
     circlesGroup.call(toolTip);
-    
     // onmouseover event
     circlesGroup.on("mouseover", function(data) {
       toolTip.style("opacity", 1)
@@ -160,7 +146,6 @@ function makeResponsive() {
           .style("opacity", 0.8)
         toolTip.hide(data);
       });
-
     return circlesGroup;
   }
 
@@ -229,60 +214,57 @@ function makeResponsive() {
     // Group for three x-axis labels
     var xLabelsGroup = chartGroup.append("g")
       .attr("transform", `translate(${chartWidth / 2}, ${chartHeight + 20})`);
+      // First x-axis label
+      var poverty = xLabelsGroup.append("text")
+        .attr("x", 0)
+        .attr("y", 30)
+        .attr("value", "poverty") // value to grab for event listener
+        .classed("active", true)
+        .text("In Poverty (%)");
 
-    // First x-axis label
-    var poverty = xLabelsGroup.append("text")
-      .attr("x", 0)
-      .attr("y", 30)
-      .attr("value", "poverty") // value to grab for event listener
-      .classed("active", true)
-      .text("In Poverty (%)");
+      // Second x-axis label
+      var age = xLabelsGroup.append("text")
+        .attr("x", 0)
+        .attr("y", 50)
+        .attr("value", "age") // value to grab for event listener
+        .classed("inactive", true)
+        .text("Age (Median)");
 
-    // Second x-axis label
-    var age = xLabelsGroup.append("text")
-      .attr("x", 0)
-      .attr("y", 50)
-      .attr("value", "age") // value to grab for event listener
-      .classed("inactive", true)
-      .text("Age (Median)");
-
-    // Second x-axis label
-    var income = xLabelsGroup.append("text")
-      .attr("x", 0)
-      .attr("y", 70)
-      .attr("value", "income") // value to grab for event listener
-      .classed("inactive", true)
-      .text("Household Income (Median)");
-
+      // Second x-axis label
+      var income = xLabelsGroup.append("text")
+        .attr("x", 0)
+        .attr("y", 70)
+        .attr("value", "income") // value to grab for event listener
+        .classed("inactive", true)
+        .text("Household Income (Median)");
 
     // Create group for three y-axis labels
     var yLabelsGroup = chartGroup.append("g")
       .attr("transform", "rotate(-90)");
+      
+      // First y-axis label
+      var healthcare = yLabelsGroup.append("text")
+        .attr("x", -chartHeight/2)
+        .attr("y", -40)
+        .attr("value", "healthcare") // value to grab for event listener
+        .classed("active", true)
+        .text("Lacks Healthcare (%)");
 
-    // First y-axis label
-    var healthcare = yLabelsGroup.append("text")
-      .attr("x", -chartHeight/2)
-      .attr("y", -40)
-      .attr("value", "healthcare") // value to grab for event listener
-      .classed("active", true)
-      .text("Lacks Healthcare (%)");
+      // Second y-axis label
+      var smokes = yLabelsGroup.append("text")
+        .attr("x", -chartHeight/2)
+        .attr("y", -60)
+        .attr("value", "smokes") // value to grab for event listener
+        .classed("inactive", true)
+        .text("Smokes (%)");
 
-    // Second y-axis label
-    var smokes = yLabelsGroup.append("text")
-      .attr("x", -chartHeight/2)
-      .attr("y", -60)
-      .attr("value", "smokes") // value to grab for event listener
-      .classed("inactive", true)
-      .text("Smokes (%)");
-
-    // Third y-axis label
-    var obesity = yLabelsGroup.append("text")
-      .attr("x", -chartHeight/2)
-      .attr("y", -80)
-      .attr("value", "obesity") // value to grab for event listener
-      .classed("inactive", true)
-      .text("Obese (%)");
-
+      // Third y-axis label
+      var obesity = yLabelsGroup.append("text")
+        .attr("x", -chartHeight/2)
+        .attr("y", -80)
+        .attr("value", "obesity") // value to grab for event listener
+        .classed("inactive", true)
+        .text("Obese (%)");
 
     // updateToolTip function above csv import
     var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
@@ -293,25 +275,18 @@ function makeResponsive() {
         // get value of selection
         var value = d3.select(this).attr("value");
         if (value !== chosenXAxis) {
-
           // replaces chosenXAxis with value
           chosenXAxis = value;
-
           // functions here found above csv import updates x scale for new data
           xLinearScale = xScale(healthData, chosenXAxis);
-
           // updates x axis with transition
           xAxis = renderXAxes(xLinearScale, xAxis);
-
           // updates circles with new x values
           circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
-
           // updates circles with circle text
           circlesText = renderCircleText(circlesText, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
-
           // updates tooltips with new info
           circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
-
           // changes classes to change bold text
           if (chosenXAxis === "poverty") {
             age
@@ -352,29 +327,21 @@ function makeResponsive() {
     // y axis labels event listener
     yLabelsGroup.selectAll("text")
       .on("click", function() {
-
         // get value of selection
         var value = d3.select(this).attr("value");
         if (value !== chosenYAxis) {
-
           // replaces chosenYAxis with value
           chosenYAxis = value;
-
           // functions here found above csv import updates y scale for new data
           yLinearScale = yScale(healthData, chosenYAxis);
-
           // updates x axis with transition
           yAxis = renderYAxes(yLinearScale, yAxis);
-
           // updates circles with new x values
           circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
-
           // updates circles with circles text
           circlesText = renderCircleText(circlesText, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
-
           // updates tooltips with new info
           circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
-
           // changes classes to change bold text
           if (chosenYAxis === "healthcare") {
             healthcare
@@ -411,7 +378,7 @@ function makeResponsive() {
           }
         }
       });
-})
+});
 };
 
 // When the browser loads, makeResponsive() is called.
