@@ -33,7 +33,7 @@ The data set includes data on rates of income, obesity, poverty, etc. by state.
 
 * We added tooltip and included state abbreviations in the circles.
 
-* * The GitHub Pages link is : https://uot-bootcamp.github.io/D3-Challenge/D3_data_journalism_2
+* The GitHub Pages link is : https://uot-bootcamp.github.io/D3-Challenge/D3_data_journalism_2
 
 #### Plot for Assignement 2:
 
