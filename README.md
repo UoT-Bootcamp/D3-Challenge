@@ -18,11 +18,9 @@ The data set includes data on rates of income, obesity, poverty, etc. by state.
 
 * Added tooltip to the circles and display each tooltip with the data that the user has selected.
 
-![d3](https://github.com/UoT-Bootcamp/D3-Challenge/blob/master/D3_data_journalism_1/screenshots/tooltip_d3Times_1.png)<br/>
-
 #### Plot for Assignement 1:
 
-![d3](https://github.com/UoT-Bootcamp/D3-Challenge/blob/master/D3_data_journalism_1/screenshots/d3_times_1.png)<br/>
+![d3](https://github.com/UoT-Bootcamp/D3-Challenge/blob/master/D3_data_journalism_1/screenshots/tooltip_d3Times_1.png)<br/>
 
 
 ## Assignment 2 - Dynamic Scatter Plot
@@ -33,8 +31,6 @@ The data set includes data on rates of income, obesity, poverty, etc. by state.
 
 * We added tooltip and included state abbreviations in the circles.
 
-![d3](https://github.com/UoT-Bootcamp/D3-Challenge/blob/master/D3_data_journalism_2/screenshots/tooltip_d3Times_2.png)<br/>
-
 #### Plot for Assignement 2:
 
-![d3](https://github.com/UoT-Bootcamp/D3-Challenge/blob/master/D3_data_journalism_2/screenshots/d3_times_2.png)
+![d3](https://github.com/UoT-Bootcamp/D3-Challenge/blob/master/D3_data_journalism_2/screenshots/tooltip_d3Times_2.png)<br/>
