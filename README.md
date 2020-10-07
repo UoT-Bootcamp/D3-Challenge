@@ -20,7 +20,7 @@ The data set includes data on rates of income, obesity, poverty, etc. by state.
 
 ![d3](https://github.com/UoT-Bootcamp/D3-Challenge/blob/master/D3_data_journalism_1/screenshots/tooltip_d3Times_1.png)<br/>
 
-The final look of the plot is below:
+#### Plot for Assignement 1:
 
 ![d3](https://github.com/UoT-Bootcamp/D3-Challenge/blob/master/D3_data_journalism_1/screenshots/d3_times_1.png)<br/>
 
@@ -35,6 +35,6 @@ The final look of the plot is below:
 
 ![d3](https://github.com/UoT-Bootcamp/D3-Challenge/blob/master/D3_data_journalism_2/screenshots/tooltip_d3Times_2.png)<br/>
 
-* The final look of the plot is below:
+#### Plot for Assignement 2:
 
 ![d3](https://github.com/UoT-Bootcamp/D3-Challenge/blob/master/D3_data_journalism_2/screenshots/d3_times_2.png)
