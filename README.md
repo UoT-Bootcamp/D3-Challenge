@@ -1,5 +1,7 @@
 # Data Journalism and D3
 
+![d3](https://media.giphy.com/media/v2xIous7mnEYg/giphy.gif)<br/>
+
 ## Background:
 
 For a major metro paper, I am alloted the task of analyzing the current trends shaping people's lives, as well as creating charts, graphs, and interactive elements to help readers understand my findings.
@@ -16,6 +18,10 @@ The data set includes data on rates of income, obesity, poverty, etc. by state.
 
 * Added tooltip to the circles and display each tooltip with the data that the user has selected.
 
+The final look of the plot is below:
+
+![d3](https://github.com/UoT-Bootcamp/D3-Challenge/blob/master/D3_data_journalism_1/screenshots/d3_times_1.png)<br/>
+
 
 ## Assignment 2 - Dynamic Scatter Plot
 
@@ -24,3 +30,7 @@ The data set includes data on rates of income, obesity, poverty, etc. by state.
 * Further, we added three labels each on X-axis and Y-axis and user can choose it as per their choice.
 
 * We added tooltip and included state abbreviations in the circles.
+
+* The final look of the plot is below:
+
+![d3](https://github.com/UoT-Bootcamp/D3-Challenge/blob/master/D3_data_journalism_2/screenshots/d3_times_2.png)
