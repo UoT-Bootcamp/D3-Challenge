@@ -18,7 +18,7 @@ The data set includes data on rates of income, obesity, poverty, etc. by state.
 
 * Added tooltip to the circles and display each tooltip with the data that the user has selected.
 
-* The GitHub Pages link is : https://uot-bootcamp.github.io/D3-Challenge/D3_data_journalism_1
+* The GitHub Pages link is : https://uot-bootcamp.github.io/Data-Journalism-and-D3/D3_data_journalism_1/
 
 #### Plot for Assignement 1:
 
@@ -33,7 +33,7 @@ The data set includes data on rates of income, obesity, poverty, etc. by state.
 
 * We added tooltip and included state abbreviations in the circles.
 
-* The GitHub Pages link is : https://uot-bootcamp.github.io/D3-Challenge/D3_data_journalism_2
+* The GitHub Pages link is : https://uot-bootcamp.github.io/Data-Journalism-and-D3/D3_data_journalism_2/
 
 #### Plot for Assignement 2:
 
